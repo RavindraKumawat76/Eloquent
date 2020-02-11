@@ -1,213 +1,79 @@
-// let theNumber = Number('56AM');
-// console.log(typeof (theNumber));
-// if (!Number.isNaN(theNumber)) {
-//  console.log(theNumber * theNumber);
-// } else {
-//  console.log('Hey Give Number');
-// }
+let sym = Symbol("name");
+console.log(sym == Symbol("name"));
+// → false
+console.log(sym);
 
-// let result = 1;
-// let counter = 0;
-// while (counter < 10){
-//  result *= 2;
-//  counter++;
-// }
-// console.log(result);
+const toStringSymbol = Symbol("toString");
+Array.prototype[toStringSymbol] = function() {
+  return `${this.length} cm of blue yarn`;
+};
 
-// let yourName;
-// do {
-//  yourName = "rr";
-// } while(!yourName);
-// console.log(yourName);
+console.log([1, 2].toString());
+// → 1,2
+console.log([1, 2][toStringSymbol]());
+// → 2 cm of blue yarn
 
-// let str='';
-// for(let i = 0; i<7; i++){
-//  for(let j = 0; j<i+1;j++){
-//   str = str+'#'
-//  }
-//  console.log(str);
-//  str='';   
-// }
+let okIterator = "OK"[Symbol.iterator]();
+console.log(okIterator.next());
+// → {value: "O", done: false}
+console.log(okIterator.next());
+// → {value: "K", done: false}
+console.log(okIterator.next());
+// → {value: undefined, done: true}
 
-// let abc = "abdd";
-// console.log(abc.length);
+class Matrix {
+ constructor(width, height, element = (x, y) => undefined) {
+   this.width = width;
+   this.height = height;
+   this.content = [];
 
-// for(let i =1; i<=100; i++){
-//  if(i%5 == 0 && i%3==0){
-//   console.log("FizzBuzz");
-//  }
-//  else if(i%5 == 0){
-//   console.log("Buzz");
-//  }
-//  else if(i%3 == 0){
-//   console.log("Fizz");
-//  }
-//  else {
-//   console.log(i);
-//  }
-// }
+   for (let y = 0; y < height; y++) {
+     for (let x = 0; x < width; x++) {
+       this.content[y * width + x] = element(x, y);
+     }
+   }
+ }
 
+ get(x, y) {
+   return this.content[y * this.width + x];
+ }
+ set(x, y, value) {
+   this.content[y * this.width + x] = value;
+ }
+}
 
-// let str='';
-// for(let i = 0; i<8; i++){
-//  for(let j = 0; j<8;j++){
-//   if(i%2 == 0){
-//    if(j%2 == 0){
-//     str = str+' ';
-//    }
-//    else{
-//     str = str+'#'
-//    }
-//   }
-//   else{
-//    if(j%2 == 0){
-//     str = str+'#';
-//    }
-//    else{
-//     str = str+' '
-//    }
-//   }  
-//  }
-//  console.log(str);
-//  str='';   
-// }
+class MatrixIterator {
+ constructor(matrix) {
+   this.x = 0;
+   this.y = 0;
+   this.matrix = matrix;
+ }
 
-// const makeNoise = function(){
-//  return "Plingg";
-// }
-// console.log(makeNoise());
+ next() {
+   if (this.y == this.matrix.height) return {done: true};
 
-// let x =10;
-// if(true){
-//  let y = 20;
-//  var z = 30;
-//  console.log(x+y+z);
-// }
-// console.log((x+z));
+   let value = {x: this.x,
+                y: this.y,
+                value: this.matrix.get(this.x, this.y)};
+   this.x++;
+   if (this.x == this.matrix.width) {
+     this.x = 0;
+     this.y++;
+   }
+   return {value, done: false};
+ }
+}
 
-// const hummus = function(factor) {
-//  const ingredient = function(amount, unit, name) {
-//    let ingredientAmount = amount * factor;
-//    if (ingredientAmount > 1) {
-//      unit += "'s";
-//    }
-//    console.log(`${ingredientAmount} ${unit} ${name}`);
-//  };
-//  ingredient(1, "can", "chickpeas");
-//  ingredient(0.25, "cup", "tahini");
-//  ingredient(0.25, "cup", "lemon juice");
-//  ingredient(1, "clove", "garlic");
-//  ingredient(2, "tablespoon", "olive oil");
-//  ingredient(0.5, "teaspoon", "cumin");
-// };
+Matrix.prototype[Symbol.iterator] = function() {
+ return new MatrixIterator(this);
+};
 
-// hummus(10);
+let matrix = new Matrix(2, 2, (x, y) => `value ${x},${y}`);
+for (let {x, y, value} of matrix) {
+  console.log(x, y, value);
+}
+// → 0 0 value 0,0
+// → 1 0 value 1,0
+// → 0 1 value 0,1
+// → 1 1 value 1,1
 
-
-// let launchMissiles = function() {
-//  missileSystem.launch("now");
-// };
-// launchMissiles();
-// if (true) {
-//  launchMissiles = function() {/* do nothing */
-//  console.log('safeMode');
-//  };
-//  launchMissiles();
-// }
-// launchMissiles();
-
-// console.log("The Future says:", future());
-
-// function future(){
-//  return "You will have flying cars";
-// }
-
-// const power = (base, exponent) => {
-//  let result = 1;
-//  for(let i = 0; i<exponent; i++){
-//   result*=base;
-//  }
-//  return result;
-// }
-// console.log(power(5,2));
-
-// function square(x){
-//   return x*x;
-// }
-// console.log(square(5,'dfsd'));
-
-// function minus(a,b){
-//  if(b===undefined){
-//   return -a;
-//  }
-//  return a-b;
-// }
-// console.log(minus(5));
-
-// function findSolution(target) {
-//  function find(current, history) {
-//    if (current == target) {
-//      return history;
-//    } else if (current > target) {
-//      return null;
-//    } else {
-//      return find(current + 5, `(${history} + 5)`) ||
-//             find(current * 3, `(${history} * 3)`);
-//    }
-//  }
-//  return find(1, "1");
-// }
-
-// console.log(findSolution(27));
-// // → (((1 * 3) + 5) * 3)
-
-// function printFarmInventory(cows, chickens) {
-
-//  let cowString = String(cows);
-//  while (cowString.length < 3) {
-//    cowString = "0" + cowString;
-//  }
-//  console.log(`${cowString} Cows`);
-
-
-//  let chickenString = String(chickens);
-//  while (chickenString.length < 3) {
-//    chickenString = "0" + chickenString;
-//  }
-//  console.log(`${chickenString} Chickens`);
-// }
-// printFarmInventory(7, 11);
-
-// function printZeroPaddedWithLabel(number, label) {
-//  let numberString = String(number);
-//  while (numberString.length < 3) {
-//    numberString = "0" + numberString;
-//  }
-//  console.log(`${numberString} ${label}`);
-// }
-
-// function printFarmInventory(cows, chickens, pigs, lions) {
-//  printZeroPaddedWithLabel(cows, "Cows");
-//  printZeroPaddedWithLabel(chickens, "Chickens");
-//  printZeroPaddedWithLabel(pigs, "Pigs");
-//  printZeroPaddedWithLabel(lions, "Lions");
-// }
-
-// printFarmInventory(7, 11, 3, 110);
-
-
-// function zeroPad(number, width) {
-//  let string = String(number);
-//  while (string.length < width) {
-//    string = "0" + string;
-//  }
-//  return string;
-// }
-
-// function printFarmInventory(cows, chickens, pigs) {
-//  console.log(`${zeroPad(cows, 3)} Cows`);
-//  console.log(`${zeroPad(chickens, 3)} Chickens`);
-//  console.log(`${zeroPad(pigs, 3)} Pigs`);
-// }
-
-// printFarmInventory(7, 16, 3);

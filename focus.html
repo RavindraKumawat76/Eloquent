@@ -1,0 +1,185 @@
+<!-- <input type="text">
+<script>
+  document.querySelector("input").focus();
+  console.log(document.activeElement.tagName);
+  // → INPUT
+  document.querySelector("input").blur();
+  console.log(document.activeElement.tagName);
+  // → BODY
+</script> -->
+
+<!-- <input type="text" tabindex=1> <a href=".">(help)</a>
+<button onclick="console.log('ok')" tabindex=2>OK</button> -->
+
+
+<!-- Pressing Enter when a form field is focused has the same effect -->
+<!-- <form action="example/submit.html">
+    Name: <input type="text" name="name"><br>
+    Password: <input type="password" name="password"><br>
+    <button type="submit">Log in</button>
+  </form>
+  <script>
+    let form = document.querySelector("form");
+    console.log(form.elements)
+    console.log(form.elements[1].type);
+    // → password
+    console.log(form.elements.password.type);
+    // → password
+    console.log(form.elements.name.form == form);
+    // → true
+  </script> -->
+
+
+
+<!-- preventDefault -->
+<!-- <form action="example/submit.html">
+    Value: <input type="text" name="value">
+    <button type="submit">Save</button>
+</form>
+<script>
+    let form = document.querySelector("form");
+    form.addEventListener("submit", event => {
+        console.log("Saving value", form.elements.value.value);
+        event.preventDefault();
+    });
+</script> -->
+
+
+
+<!-- Inserting the String when pressing F2 -->
+<!-- <textarea></textarea>
+<script>
+  let textarea = document.querySelector("textarea");
+  textarea.addEventListener("keydown", event => {
+    // The key code for F2 happens to be 113
+    if (event.keyCode == 113) {
+      replaceSelection(textarea, "Khasekhemwy");
+      event.preventDefault();
+    }
+  });
+  function replaceSelection(field, word) {
+    let from = field.selectionStart, to = field.selectionEnd;
+    field.value = field.value.slice(0, from) + word +
+                  field.value.slice(to);
+    // Put the cursor after the word
+    field.selectionStart = from + word.length;
+    field.selectionEnd = from + word.length;
+  }
+</script> -->
+
+
+
+<!-- The following example shows a text field and a counter displaying the current length of the text in the field: -->
+<!-- <input type="text"> length: <span id="length">0</span>
+<script>
+  let text = document.querySelector("input");
+  let output = document.querySelector("#length");
+  text.addEventListener("input", () => {
+    output.textContent = text.value.length;
+  });
+</script> -->
+
+
+
+<!-- Checkboxes Action Particular-->
+<!-- <label>
+    <input type="checkbox" id="orangered"> Make this page orange
+</label>
+<script>
+    let checkbox = document.querySelector("#orangered");
+    checkbox.addEventListener("change", () => {
+        document.body.style.background =
+            checkbox.checked ? "orangered" : "";
+    });
+</script> -->
+
+
+
+<!-- radio button working condition -->
+<!-- Color:
+<label>
+    <input type="radio" name="color" value="orange"> Orange
+</label>
+<label>
+    <input type="radio" name="color" value="lightgreen"> Green
+</label>
+<label>
+    <input type="radio" name="color" value="lightblue"> Blue
+</label>
+<script>
+    let buttons = document.querySelectorAll("[name=color]");
+    for (let button of Array.from(buttons)) {
+        button.addEventListener("change", () => {
+            document.body.style.background = button.value;
+        });
+    }
+</script> -->
+
+
+
+<!-- Select Field -->
+<!-- <select multiple>
+    <option value="1">0001</option>
+    <option value="2">0010</option>
+    <option value="4">0100</option>
+    <option value="8">1000</option>
+</select> = <span id="output">0</span>
+<script>
+    let select = document.querySelector("select");
+    let output = document.querySelector("#output");
+    select.addEventListener("change", () => {
+        let number = 0;
+        for (let option of Array.from(select.options)) {
+            if (option.selected) {
+                number += Number(option.value);
+            }
+        }
+        output.textContent = number;
+    });
+</script> -->
+
+
+
+<!-- <input type="file">
+<script>
+  let input = document.querySelector("input");
+  input.addEventListener("change", () => {
+    if (input.files.length > 0) {
+      let file = input.files[0];
+      console.log("You chose", file.name);
+      if (file.type) console.log("It has type", file.type);
+    }
+  });
+</script> -->
+
+
+<!-- Multiple file taking as input -->
+<!-- <input type="file" multiple>
+<script>
+  let input = document.querySelector("input");
+  input.addEventListener("change", () => {
+    for (let file of Array.from(input.files)) {
+      let reader = new FileReader();
+      reader.addEventListener("load", () => {
+        console.log("File", file.name, "starts with",
+                    reader.result.slice(0, 20));
+      });
+      reader.readAsText(file);
+    }
+  });
+</script> -->
+
+
+<!-- Reading file Error Handling -->
+<script>
+  function readFileText(file) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.addEventListener(
+        "load", () => resolve(reader.result));
+      reader.addEventListener(
+        "error", () => reject(reader.error));
+      reader.readAsText(file);
+    });
+  }
+</script>
